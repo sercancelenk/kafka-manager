@@ -1,0 +1,628 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "For any questions, please contact with PaaS - Data Streaming Team",
+        "title": "Kafka Stream Api",
+        "contact": {
+            "name": "Infrastructure - PaaS - Data Streaming",
+            "email": "messaging-development@trendyol.com"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1/",
+    "paths": {
+        "/consumers/info-by-group": {
+            "get": {
+                "description": "get consumer group details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "consumer services"
+                ],
+                "summary": "Get Consumer Info by Group Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "GroupId",
+                        "name": "groupId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/consumer.GetConsumerInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/consumers/info-by-topic": {
+            "get": {
+                "description": "get consumers of topic",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "consumer services"
+                ],
+                "summary": "GetConsumersByTopic",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Topic",
+                        "name": "topic",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/consumer.GetConsumersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/consumers/list": {
+            "get": {
+                "description": "get consumer group list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "consumer services"
+                ],
+                "summary": "GetConsumerGroupList",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/topics": {
+            "get": {
+                "description": "get topic list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic services"
+                ],
+                "summary": "GetTopicList",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic.GetTopicListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/topics/info": {
+            "get": {
+                "description": "get topic info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic services"
+                ],
+                "summary": "GetTopicInfo",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Topic",
+                        "name": "topic",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic.GetTopicInfoResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/topics/messages": {
+            "get": {
+                "description": "get top messages",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "topic services"
+                ],
+                "summary": "GetTopMessages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ClusterId",
+                        "name": "clusterId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Topic",
+                        "name": "topic",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Size",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topic.GetTopicMessagesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "consumer.ConsumerGroupCoordinator": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "idstring": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "rack": {
+                    "type": "string"
+                }
+            }
+        },
+        "consumer.ConsumerGroupInfo": {
+            "type": "object",
+            "properties": {
+                "assignedPartitionsCount": {
+                    "type": "integer"
+                },
+                "assignedTopicCount": {
+                    "type": "integer"
+                },
+                "coordinator": {
+                    "$ref": "#/definitions/consumer.ConsumerGroupCoordinator"
+                },
+                "groupID": {
+                    "type": "string"
+                },
+                "memberCount": {
+                    "type": "integer"
+                },
+                "membersByTopic": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/consumer.ConsumerGroupMember"
+                        }
+                    }
+                },
+                "partitionAssignor": {
+                    "type": "string"
+                },
+                "podCount": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "totalLag": {
+                    "type": "integer"
+                }
+            }
+        },
+        "consumer.ConsumerGroupMember": {
+            "type": "object",
+            "properties": {
+                "clientID": {
+                    "type": "string"
+                },
+                "committedOffset": {
+                    "type": "integer"
+                },
+                "consumerID": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "lag": {
+                    "type": "integer"
+                },
+                "latestOffset": {
+                    "type": "integer"
+                },
+                "memberID": {
+                    "type": "string"
+                },
+                "partition": {
+                    "type": "integer"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "consumer.GetConsumerInfoResponse": {
+            "type": "object",
+            "properties": {
+                "infos": {
+                    "$ref": "#/definitions/consumer.ConsumerGroupInfo"
+                }
+            }
+        },
+        "consumer.GetConsumersResponse": {
+            "type": "object",
+            "properties": {
+                "infos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/consumer.ConsumerGroupInfo"
+                    }
+                }
+            }
+        },
+        "http.Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.PaginatedResponse-string": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "totalItems": {
+                    "type": "integer"
+                },
+                "totalPages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "topic.GetTopicInfoResponse": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/topic.TopicInfo"
+                }
+            }
+        },
+        "topic.GetTopicListResponse": {
+            "type": "object",
+            "properties": {
+                "topics": {
+                    "$ref": "#/definitions/service.PaginatedResponse-string"
+                }
+            }
+        },
+        "topic.GetTopicMessagesResponse": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/topic.MessageInfo"
+                    }
+                }
+            }
+        },
+        "topic.MessageHeader": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "topic.MessageInfo": {
+            "type": "object",
+            "properties": {
+                "blockTimestamp": {
+                    "description": "only set if kafka is version 0.10+, outer (compressed) block timestamp",
+                    "type": "string"
+                },
+                "headers": {
+                    "description": "only set if kafka is version 0.11+",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/topic.MessageHeader"
+                    }
+                },
+                "key": {
+                    "type": "string"
+                },
+                "offset": {
+                    "type": "integer"
+                },
+                "partition": {
+                    "type": "integer"
+                },
+                "timestamp": {
+                    "description": "only set if kafka is version 0.10+, inner message timestamp",
+                    "type": "string"
+                },
+                "topic": {
+                    "type": "string"
+                }
+            }
+        },
+        "topic.TopicInfo": {
+            "type": "object",
+            "properties": {
+                "clusterId": {
+                    "type": "string"
+                },
+                "config": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "messageCount": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "partitionCount": {
+                    "type": "integer"
+                },
+                "replicas": {
+                    "type": "integer"
+                },
+                "retentionDay": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

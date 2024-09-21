@@ -1,0 +1,12 @@
+server:
+  host: "paas-datastreaming-kafka-janitor-service.stage.trendyol.com"
+  port: 8086
+
+newrelic:
+  name: "stage-kafka-janitor"
+  license: "91c936942b75aa6978d1caa8c1b8cc4bFFFFNRAL"
+
+clusters:
+  cluster-1:
+    brokers:
+      - localhost:9092

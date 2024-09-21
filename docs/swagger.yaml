@@ -1,0 +1,417 @@
+basePath: /api/v1/
+definitions:
+  consumer.ConsumerGroupCoordinator:
+    properties:
+      host:
+        type: string
+      id:
+        type: integer
+      idstring:
+        type: string
+      port:
+        type: integer
+      rack:
+        type: string
+    type: object
+  consumer.ConsumerGroupInfo:
+    properties:
+      assignedPartitionsCount:
+        type: integer
+      assignedTopicCount:
+        type: integer
+      coordinator:
+        $ref: '#/definitions/consumer.ConsumerGroupCoordinator'
+      groupID:
+        type: string
+      memberCount:
+        type: integer
+      membersByTopic:
+        additionalProperties:
+          items:
+            $ref: '#/definitions/consumer.ConsumerGroupMember'
+          type: array
+        type: object
+      partitionAssignor:
+        type: string
+      podCount:
+        type: integer
+      state:
+        type: string
+      totalLag:
+        type: integer
+    type: object
+  consumer.ConsumerGroupMember:
+    properties:
+      clientID:
+        type: string
+      committedOffset:
+        type: integer
+      consumerID:
+        type: string
+      host:
+        type: string
+      lag:
+        type: integer
+      latestOffset:
+        type: integer
+      memberID:
+        type: string
+      partition:
+        type: integer
+      topic:
+        type: string
+    type: object
+  consumer.GetConsumerInfoResponse:
+    properties:
+      infos:
+        $ref: '#/definitions/consumer.ConsumerGroupInfo'
+    type: object
+  consumer.GetConsumersResponse:
+    properties:
+      infos:
+        items:
+          $ref: '#/definitions/consumer.ConsumerGroupInfo'
+        type: array
+    type: object
+  http.Error:
+    properties:
+      code:
+        type: integer
+      error:
+        type: string
+      message:
+        type: string
+    type: object
+  service.PaginatedResponse-string:
+    properties:
+      items:
+        items:
+          type: string
+        type: array
+      page:
+        type: integer
+      totalItems:
+        type: integer
+      totalPages:
+        type: integer
+    type: object
+  topic.GetTopicInfoResponse:
+    properties:
+      info:
+        $ref: '#/definitions/topic.TopicInfo'
+    type: object
+  topic.GetTopicListResponse:
+    properties:
+      topics:
+        $ref: '#/definitions/service.PaginatedResponse-string'
+    type: object
+  topic.GetTopicMessagesResponse:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/topic.MessageInfo'
+        type: array
+    type: object
+  topic.MessageHeader:
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+    type: object
+  topic.MessageInfo:
+    properties:
+      blockTimestamp:
+        description: only set if kafka is version 0.10+, outer (compressed) block
+          timestamp
+        type: string
+      headers:
+        description: only set if kafka is version 0.11+
+        items:
+          $ref: '#/definitions/topic.MessageHeader'
+        type: array
+      key:
+        type: string
+      offset:
+        type: integer
+      partition:
+        type: integer
+      timestamp:
+        description: only set if kafka is version 0.10+, inner message timestamp
+        type: string
+      topic:
+        type: string
+    type: object
+  topic.TopicInfo:
+    properties:
+      clusterId:
+        type: string
+      config:
+        additionalProperties:
+          type: string
+        type: object
+      messageCount:
+        type: integer
+      name:
+        type: string
+      partitionCount:
+        type: integer
+      replicas:
+        type: integer
+      retentionDay:
+        type: integer
+    type: object
+info:
+  contact:
+    email: messaging-development@trendyol.com
+    name: Infrastructure - PaaS - Data Streaming
+  description: For any questions, please contact with PaaS - Data Streaming Team
+  title: Kafka Stream Api
+  version: "1.0"
+paths:
+  /consumers/info-by-group:
+    get:
+      consumes:
+      - application/json
+      description: get consumer group details
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: GroupId
+        in: query
+        name: groupId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/consumer.GetConsumerInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: Get Consumer Info by Group Id
+      tags:
+      - consumer services
+  /consumers/info-by-topic:
+    get:
+      consumes:
+      - application/json
+      description: get consumers of topic
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: Topic
+        in: query
+        name: topic
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/consumer.GetConsumersResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: GetConsumersByTopic
+      tags:
+      - consumer services
+  /consumers/list:
+    get:
+      consumes:
+      - application/json
+      description: get consumer group list
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: Size
+        in: query
+        name: size
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              type: string
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: GetConsumerGroupList
+      tags:
+      - consumer services
+  /topics:
+    get:
+      consumes:
+      - application/json
+      description: get topic list
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: Page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: Size
+        in: query
+        name: size
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topic.GetTopicListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: GetTopicList
+      tags:
+      - topic services
+  /topics/info:
+    get:
+      consumes:
+      - application/json
+      description: get topic info
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: Topic
+        in: query
+        name: topic
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topic.GetTopicInfoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: GetTopicInfo
+      tags:
+      - topic services
+  /topics/messages:
+    get:
+      consumes:
+      - application/json
+      description: get top messages
+      parameters:
+      - description: ClusterId
+        in: query
+        name: clusterId
+        required: true
+        type: string
+      - description: Topic
+        in: query
+        name: topic
+        required: true
+        type: string
+      - description: Size
+        in: query
+        name: size
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topic.GetTopicMessagesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Error'
+      summary: GetTopMessages
+      tags:
+      - topic services
+swagger: "2.0"
