@@ -1,0 +1,23 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+.idea
+# Test binary, built with `go test -c`
+*.test
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+# Go workspace file
+go.work
+kafka-janitor
+.cobertura/
+.go/
+
+
+internal/db/env/stage_env.sh
+internal/db/env/prod_env.sh
+
+db_data/
+.bin/

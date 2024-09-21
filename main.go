@@ -1,13 +1,10 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"github.com/IBM/sarama"
-	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/contrib/fiberzap/v2"
-	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -15,7 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
-	observability "gitlab.trendyol.com/devx/observability/sdk/opentelemetry-go"
 	_ "gitlab.trendyol.com/platform/messaging/kafka/kafka-stream-api/docs"
 	"gitlab.trendyol.com/platform/messaging/kafka/kafka-stream-api/domain/controller/consumer"
 	"gitlab.trendyol.com/platform/messaging/kafka/kafka-stream-api/domain/controller/topic"
@@ -63,23 +59,14 @@ func main() {
 		zap.L().Panic("config read failed", zap.Error(err))
 	}
 
-	ctx := context.Background()
-	closeFunc := observability.Initialize()
-	defer closeFunc(ctx)
-
 	app := fiber.New(fiber.Config{
 		ErrorHandler: http.ErrorHandler(),
 	})
-
-	prometheus := fiberprometheus.New("kafka-stream-api")
-	prometheus.RegisterAt(app, "/metrics")
 
 	app.Use(pprof.New())
 	app.Use(fiberzap.New(fiberzap.Config{
 		Logger: zap.L(),
 	}))
-	app.Use(prometheus.Middleware)
-	app.Use(otelfiber.Middleware())
 	app.Use(recover.New())
 	app.Use(compress.New())
 	app.Use(cors.New())
